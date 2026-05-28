@@ -31,7 +31,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[95vh] flex items-center justify-center overflow-hidden bg-black text-white">
+      <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden bg-black text-white">
         <motion.div 
           style={{ y }}
           className="absolute inset-0 z-0 opacity-60"
@@ -56,10 +56,10 @@ export default function HomePage() {
           />
         </motion.div>
         
-        <div className="relative z-10 w-full px-6 md:px-12 h-full flex flex-col justify-between pb-10 pt-28 md:pt-32 text-white">
+        <div className="relative z-10 w-full px-6 md:px-12 h-[100dvh] flex flex-col justify-between pb-4 md:pb-8 pt-24 md:pt-28 text-white">
           
           {/* Top minimal elements */}
-          <div className="flex justify-between items-start text-[0.55rem] md:text-xs uppercase tracking-[0.3em] font-light opacity-70">
+          <div className="flex justify-between items-start text-[0.55rem] md:text-xs uppercase tracking-[0.3em] font-light opacity-70 shrink-0">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.8 }}>
               Lisboa, PT
             </motion.div>
@@ -70,21 +70,21 @@ export default function HomePage() {
           </div>
 
           {/* Center Content */}
-          <div className="flex flex-col items-center justify-center flex-1">
-             <div className="overflow-hidden mb-8 md:mb-10 text-center flex flex-col items-center">
+          <div className="flex flex-col items-center justify-center flex-1 py-8">
+             <div className="mb-6 md:mb-8 text-center flex flex-col items-center w-full">
                  <motion.div
                    initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                    transition={{ duration: 1.5, delay: 0.4, ease: "easeOut" }}
-                   className="mb-2 md:mb-4"
+                   className="mb-2 md:mb-4 flex items-center justify-center w-full"
                  >
-                   <FadaLogo className="w-64 h-48 md:w-[35rem] md:h-[25rem] lg:w-[45rem] lg:h-[30rem]" iconClassName="invert brightness-0" />
+                   <FadaLogo className="w-[50vw] max-w-[250px] h-[50vw] max-h-[250px] md:w-[35vh] md:max-w-[500px] md:h-[35vh] lg:w-[40vh] lg:h-[40vh]" iconClassName="invert brightness-0" />
                  </motion.div>
                  <motion.div 
                    initial={{ opacity: 0, scale: 0 }}
                    animate={{ opacity: 1, scale: 1 }}
                    transition={{ duration: 1, delay: 1 }}
-                   className="w-1.5 h-1.5 rounded-full bg-white/50 mb-6 md:mb-8 mt-4 md:mt-6"
+                   className="w-1.5 h-1.5 rounded-full bg-white/50 mb-6 md:mb-8 mt-2 md:mt-4"
                  />
                  <motion.p 
                    initial={{ opacity: 0, y: 20 }}
@@ -100,10 +100,10 @@ export default function HomePage() {
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 1, delay: 1.6 }}
-               className="relative mt-4"
+               className="relative mt-2"
              >
                 <div className="absolute -inset-4 bg-white/10 blur-2xl rounded-full" />
-                <Button asChild size="lg" className="relative bg-black/20 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-all duration-700 px-8 font-light tracking-[0.2em] text-[0.6rem] md:text-xs uppercase h-12 md:h-14">
+                <Button asChild size="lg" className="relative bg-black/20 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-all duration-700 px-6 md:px-8 font-light tracking-[0.2em] text-[0.6rem] md:text-xs uppercase h-10 md:h-12">
                   <Link href="/contactos">
                     Reservar Experiência
                   </Link>
@@ -112,8 +112,8 @@ export default function HomePage() {
           </div>
 
           {/* Bottom elements */}
-          <div className="grid grid-cols-1 md:grid-cols-3 items-end text-[0.55rem] md:text-xs uppercase tracking-[0.3em] font-light mt-8">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.8 }} className="opacity-70 hidden md:block text-left pb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 items-end text-[0.55rem] md:text-xs uppercase tracking-[0.3em] font-light mt-4 shrink-0">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 1.8 }} className="opacity-70 hidden md:block text-left pb-2 md:pb-4">
               Scroll to explore
             </motion.div>
             
@@ -121,9 +121,9 @@ export default function HomePage() {
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                transition={{ duration: 1, delay: 2 }}
-               className="flex flex-col items-center justify-self-center md:col-start-2"
+               className="flex flex-col items-center justify-self-center md:col-start-2 place-self-end mt-4 md:mt-0"
             >
-              <div className="text-[0.45rem] md:text-[0.5rem] tracking-[0.4em] mb-4 opacity-50">Descobrir</div>
+              <div className="text-[0.45rem] md:text-[0.5rem] tracking-[0.4em] mb-3 opacity-50">Descobrir</div>
               <motion.div 
                  animate={{ y: [0, 8, 0], opacity: [0.3, 1, 0.3] }} 
                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}

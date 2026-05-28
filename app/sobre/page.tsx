@@ -42,7 +42,7 @@ export default function AboutPage() {
             />
             <div className="space-y-6 text-zinc-600 text-lg font-light leading-relaxed">
               <p>
-                No Fada Studio, acreditamos que a verdadeira beleza nasce da saúde absoluta. "Não fazemos unhas, cuidamos delas." Este não é apenas um slogan, é a fundação de cada protocolo que desenvolvemos.
+                No Fada Studio, acreditamos que a verdadeira beleza nasce da saúde absoluta. &quot;Não fazemos unhas, cuidamos delas.&quot; Este não é apenas um slogan, é a fundação de cada protocolo que desenvolvemos.
               </p>
               <p>
                 Recusamos o uso de substâncias agressivas. Os nossos materiais são 100% Hemma e TPO free, minimizando os riscos de alergias e preservando a integridade celular das extremidades.
