@@ -3,13 +3,211 @@
 import * as React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from 'motion/react';
 import { Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FadaLogo, FadaIcon } from '@/components/ui/logo';
 import { AnimatedWords } from '@/components/ui/animated-words';
 
+const portfolioItems = [
+  {
+    id: 1,
+    title: "Alinhamento Russo Nude",
+    desc: "Nivelamento térmico e cobertura nude ultra-brilhante. Foco em simetria de cutículas de forma totalmente assética e indolor.",
+    category: "manicure",
+    src: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 md:row-span-2 aspect-[3/4] md:aspect-auto"
+  },
+  {
+    id: 2,
+    title: "Lash Lifting Premium",
+    desc: "Curvatura orgânica e nutrição profunda dos cílios sem danificar os fios naturais.",
+    category: "pestanas",
+    src: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  },
+  {
+    id: 3,
+    title: "Banho de Gel Fortalecedor",
+    desc: "Aperfeiçoamento estrutural de unhas mais fracas ou quebradas, conferindo resistência extrema.",
+    category: "manicure",
+    src: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  },
+  {
+    id: 4,
+    title: "Volume Russo Imperial",
+    desc: "Extensão volumétrica com peso impercetível, desenhando um olhar marcante e sofisticado.",
+    category: "pestanas",
+    src: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  },
+  {
+    id: 5,
+    title: "Coleção de Gel Hemma-Free",
+    desc: "Fórmulas livres de monómeros tóxicos, ideais para peles sensíveis, mantendo o brilho incomparável.",
+    category: "manicure",
+    src: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-2 aspect-[16/10] md:aspect-auto md:h-96"
+  },
+  {
+    id: 6,
+    title: "Alongamento em Fibra de Vidro",
+    desc: "Extremidades ultra-finas e estruturadas com alta durabilidade e aspeto totalmente natural.",
+    category: "manicure",
+    src: "https://images.unsplash.com/photo-1604242692760-2f7b0c26856d?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  },
+  {
+    id: 7,
+    title: "Efeito Rímel & Lash Spa",
+    desc: "Efeito marcante com fios estrategicamente selecionados e tratamento nutritivo pós-procedimento.",
+    category: "pestanas",
+    src: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  },
+  {
+    id: 8,
+    title: "Nail Art Francesa Fina",
+    desc: "O clássico atemporal reinventado com traços milimétricos e acabamento de alta definição.",
+    category: "manicure",
+    src: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  },
+  {
+    id: 9,
+    title: "Tratamento de Mãos & Cutículas",
+    desc: "Esfoliação de damasco e máscara nutritiva de manteiga de karité pura para um toque irresistivelmente aveludado.",
+    category: "manicure",
+    src: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-2 aspect-[16/10] md:aspect-auto md:h-96"
+  },
+  {
+    id: 10,
+    title: "Esmaltação de Alta Precisão",
+    desc: "Aplicação milimétrica de verniz de gel sob a cutícula com cor intensa e durabilidade insuperável.",
+    category: "manicure",
+    src: "https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  },
+  {
+    id: 11,
+    title: "Sobrancelhas Hybrid Velvet",
+    desc: "Alinhamento tridimensional preciso e pigmentação rica, criando densidade natural e moldura elegante para o olhar.",
+    category: "pestanas",
+    src: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  },
+  {
+    id: 12,
+    title: "Nail Art Customizada",
+    desc: "Desenhos geométricos e texturas abstratas minimalistas pintadas à mão sob medida para realçar sua essência única.",
+    category: "manicure",
+    src: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&q=80&w=800",
+    gridClass: "md:col-span-1 aspect-square"
+  }
+];
+
+function InteractivePortfolioCard({ item, index }: { item: typeof portfolioItems[0]; index: number }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Smooth springs for high-end mouse-tracking tilt effect
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { damping: 25, stiffness: 250 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { damping: 25, stiffness: 250 });
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left - width / 2;
+    const mouseY = event.clientY - rect.top - height / 2;
+    x.set(mouseX / width);
+    y.set(mouseY / height);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, scale: 0.92, y: 100, rotateX: 15 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      exit={{ opacity: 0, scale: 0.9, y: 30 }}
+      transition={{ 
+        duration: 1.2, 
+        ease: [0.16, 1, 0.3, 1],
+        delay: (index % 3) * 0.12
+      }}
+      className={`group relative overflow-hidden bg-zinc-950 border border-zinc-100/10 cursor-pointer shadow-md rounded-lg ${item.gridClass}`}
+      style={{ perspective: 1200, transformStyle: "preserve-3d" }}
+    >
+      <motion.div 
+        className="relative w-full h-full overflow-hidden"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ 
+          rotateX, 
+          rotateY, 
+          transformStyle: "preserve-3d" 
+        }}
+      >
+        <Image 
+          src={item.src} 
+          alt={item.title} 
+          fill 
+          sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
+          className="object-cover transition-transform duration-1000 ease-out scale-100 group-hover:scale-105" 
+          referrerPolicy="no-referrer" 
+        />
+        
+        {/* Sleek thin frame inside that illuminates on hover */}
+        <div className="absolute inset-0 border border-white/0 group-hover:border-white/20 transition-colors duration-700 pointer-events-none z-30 m-3 rounded-md" />
+
+        {/* Luxury gradient vignette backdrop overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10 opacity-70 group-hover:opacity-85 transition-opacity duration-700 z-10" />
+        
+        {/* Elegant top category floating badge */}
+        <div className="absolute top-4 left-4 z-20 overflow-hidden rounded-full font-sans">
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 text-white px-3 py-1 text-[0.55rem] font-medium tracking-[0.25em] uppercase">
+            {item.category === 'manicure' ? 'Unha Russa' : 'Olhar'}
+          </div>
+        </div>
+
+        {/* Card text details with depth spacing */}
+        <div 
+          className="absolute inset-0 flex flex-col justify-end p-5 md:p-6 z-20 translate-y-1 group-hover:translate-y-0 transition-transform duration-700 ease-out font-sans"
+          style={{ transform: "translateZ(30px)" }}
+        >
+          <div className="text-white">
+            <span className="text-[0.55rem] tracking-[0.35em] font-medium text-zinc-400 uppercase mb-1.5 block group-hover:text-zinc-200 transition-colors duration-300">
+              {item.category === 'manicure' ? 'Estética de Assinatura' : 'Design de Pestanas'}
+            </span>
+            <h3 className="font-playfair text-lg md:text-xl lg:text-2xl mb-1.5 opacity-95 group-hover:opacity-100 transition-opacity duration-300 tracking-wide">
+              {item.title}
+            </h3>
+            
+            {/* Description only shown on hover, smoothly expanding grid height */}
+            <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-[0.16,1,0.3,1]">
+              <div className="overflow-hidden">
+                <p className="text-[0.7rem] md:text-xs font-light tracking-wide text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 leading-relaxed max-w-md">
+                  {item.desc}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function HomePage() {
+  const [activeFilter, setActiveFilter] = React.useState<'all' | 'manicure' | 'pestanas'>('all');
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   
@@ -173,8 +371,8 @@ export default function HomePage() {
           className="relative w-full lg:w-1/2 aspect-square lg:aspect-auto lg:h-[90vh]"
         >
            <Image
-             src="https://picsum.photos/seed/lux-nails-macro/1000/1200"
-             alt="Cuidado Premium"
+             src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=1200"
+             alt="Cuidado Premium de Unhas"
              fill
              className="object-cover"
              referrerPolicy="no-referrer"
@@ -206,35 +404,71 @@ export default function HomePage() {
       </section>
 
       {/* Visual Gallery Layout / Especialidades */}
-      <section className="py-24 md:py-32 bg-white px-4">
+      <section className="py-24 md:py-32 bg-white px-4 md:px-8">
         <div className="max-w-[90rem] mx-auto">
           <motion.div 
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp}
-            className="text-center mb-16 md:mb-24"
+            className="text-center mb-12 md:mb-16 animate-fade-in"
           >
              <AnimatedWords 
-               text="O Nosso Portfólio"
+               text="Coleção de Assinatura"
                elementType="h2"
-               className="font-playfair text-4xl md:text-5xl lg:text-6xl mb-6"
+               className="font-playfair text-4xl md:text-5xl lg:text-6xl mb-4"
              />
-             <Link href="/servicos" className="text-xs uppercase tracking-[0.2em] text-zinc-400 hover:text-black transition-colors underline underline-offset-8">
-               Ver Menu Completo
-             </Link>
+             <p className="text-zinc-400 font-light text-sm md:text-base tracking-[0.1em] uppercase max-w-xl mx-auto mb-10 leading-relaxed">
+               Imersão estética e rigor clínico criados à medida. Filtre as nossas artes de assinatura.
+             </p>
+             
+             {/* Category Filter Controls */}
+             <div className="flex justify-center items-center space-x-2 md:space-x-4 border-b border-zinc-100 pb-6 max-w-sm mx-auto">
+               {[
+                 { id: 'all', label: 'Todos' },
+                 { id: 'manicure', label: 'Manicure' },
+                 { id: 'pestanas', label: 'Pestanas' }
+               ].map((filter) => {
+                 const isActive = activeFilter === filter.id;
+                 return (
+                   <button
+                     key={filter.id}
+                     onClick={() => setActiveFilter(filter.id as any)}
+                     className="relative py-2 px-3 text-xs uppercase tracking-[0.2em] font-medium text-zinc-400 hover:text-black transition-colors duration-300 cursor-pointer"
+                   >
+                     <span className={isActive ? 'text-black font-semibold' : 'text-zinc-400 hover:text-zinc-650'}>
+                       {filter.label}
+                     </span>
+                     {isActive && (
+                       <motion.div 
+                         layoutId="activeFilterUnderline"
+                         className="absolute bottom-0 left-0 right-0 h-[2px] bg-black"
+                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                       />
+                     )}
+                   </button>
+                 );
+               })}
+             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="group relative aspect-[3/4] md:aspect-square overflow-hidden bg-zinc-100">
-               <Image src="https://picsum.photos/seed/manicure-russa/800/1000" alt="Manicure" fill className="object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
-               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-700 flex items-end p-8 md:p-12">
-                 <h3 className="text-white font-playfair text-3xl md:text-4xl">Manicure</h3>
-               </div>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="group relative aspect-[3/4] md:aspect-square overflow-hidden bg-zinc-100">
-               <Image src="https://picsum.photos/seed/lashes-art/800/1000" alt="Lashes" fill className="object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
-               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-700 flex items-end p-8 md:p-12">
-                 <h3 className="text-white font-playfair text-3xl md:text-4xl">Pestanas</h3>
-               </div>
-            </motion.div>
+          {/* Animated Bento Grid */}
+          <motion.div 
+            layout 
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 min-h-[600px]"
+            style={{ perspective: 1000 }}
+          >
+            <AnimatePresence mode="popLayout">
+              {portfolioItems
+                .filter(item => activeFilter === 'all' || item.category === activeFilter)
+                .map((item, idx) => (
+                  <InteractivePortfolioCard key={item.id} item={item} index={idx} />
+                ))
+              }
+            </AnimatePresence>
+          </motion.div>
+
+          <div className="text-center mt-12 md:mt-16">
+            <Link href="/servicos" className="text-xs uppercase tracking-[0.2em] text-zinc-400 hover:text-black transition-colors underline underline-offset-8">
+              Ver Menu Completo de Serviços
+            </Link>
           </div>
         </div>
       </section>
